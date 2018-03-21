@@ -9,6 +9,8 @@ from telebot.types import Message, InlineQueryResultArticle, InputTextMessageCon
 TOKEN = os.environ['OWL_BOT_TOKEN']
 RUS = 'rus'
 ENG = 'eng'
+GER = 'ger'
+
 
 CONFIRMS = {
 	RUS: {
@@ -19,7 +21,12 @@ CONFIRMS = {
 	ENG: {
 		'confirm': 'Confirm',
 		'hoot': 'Yea',
-		'shir': 'Bullshit'
+		'shit': 'Bullshit'
+	},
+	GER: {
+		'confirm': 'Bekräftige',
+		'hoot': 'Jo',
+		'shit': 'Dingsda'
 	}
 }
 
@@ -46,6 +53,11 @@ def reply(text: str, message_id: int) -> Optional[dict]:
 			'text': get_confirm_message(ENG),
 			'reply_to_message_id': message_id
 		}
+	if 'der Uhu' in text and 'bekräftig' in text:
+		return {
+			'text': get_confirm_message(GER),
+			'reply_to_message_id': message_id
+		}
 	if 'подтверди' in text:
 		return {
 			'text': get_confirm_message(RUS),
@@ -53,6 +65,10 @@ def reply(text: str, message_id: int) -> Optional[dict]:
 	if 'confirm' in text:
 		return {
 			'text': get_confirm_message(ENG),
+		}
+	if 'bekräftig' in text:
+		return {
+			'text': get_confirm_message(GER),
 		}
 	if 'сколк' in text:
 		return {
