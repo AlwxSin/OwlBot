@@ -25,7 +25,7 @@ CONFIRMS = {
 	},
 	GER: {
 		'confirm': 'Bekräftige',
-		'hoot': 'Jo',
+		'hoot': random.choice(['Ja', 'Ja-Ja', 'Jo', 'Schtimt']),
 		'shit': 'Dingsda'
 	}
 }
