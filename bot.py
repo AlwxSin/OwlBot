@@ -9,6 +9,7 @@ TOKEN = os.environ['OWL_BOT_TOKEN']
 bot = telebot.TeleBot(TOKEN)
 
 
+@bot.edited_message_handler(content_types=['text'])
 @bot.message_handler(content_types=['text'])
 def text_handler(message: Message):
 	text = message.text.lower()
