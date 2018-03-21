@@ -53,7 +53,7 @@ def reply(text: str, message_id: int) -> Optional[dict]:
 			'text': get_confirm_message(ENG),
 			'reply_to_message_id': message_id
 		}
-	if 'der Uhu' in text and 'bekräftig' in text:
+	if 'der uhu' in text and 'bekräftig' in text:
 		return {
 			'text': get_confirm_message(GER),
 			'reply_to_message_id': message_id
