@@ -23,7 +23,7 @@ def text_handler(message: Message):
 		bot.send_message(chat_id, 'Подтверждаю')
 	else:
 		r = random.randint(1, 100)
-		if r < 15:
+		if r < 10:
 			bot.send_message(chat_id, 'Угу')
 
 
