@@ -25,7 +25,6 @@ CONFIRMS = {
 
 thumb_url = f'https://api.telegram.org/file/bot{TOKEN}/photos/file_2.jpg'
 bot = telebot.TeleBot(TOKEN)
-# print(bot.get_me())
 
 
 def get_confirm_message(lang: str):
@@ -71,7 +70,6 @@ def reply(text: str, message_id: int) -> Optional[dict]:
 @bot.edited_message_handler(content_types=['text'])
 @bot.message_handler(content_types=['text'])
 def text_handler(message: Message):
-	# print(f"{message.from_user} - {message.text}")
 	text = message.text.lower()
 	chat_id = message.chat.id
 	payload = reply(text, message.message_id)
@@ -81,7 +79,6 @@ def text_handler(message: Message):
 
 @bot.inline_handler(lambda query: query.query)
 def query_text(inline_query):
-	# print(inline_query)
 	r = InlineQueryResultArticle('1', 'Подтвердить', InputTextMessageContent('Подтверждаю'), thumb_url=thumb_url)
 	bot.answer_inline_query(inline_query.id, results=[r])
 
