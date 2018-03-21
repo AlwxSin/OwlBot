@@ -1,19 +1,71 @@
 #!/usr/bin/env python
 import os
 import random
+from typing import Optional
 
 import telebot
 from telebot.types import Message, InlineQueryResultArticle, InputTextMessageContent
 
 TOKEN = os.environ['OWL_BOT_TOKEN']
+RUS = 'rus'
+ENG = 'eng'
+
+CONFIRMS = {
+	RUS: {
+		'confirm': 'Подтверждаю',
+		'hoot': 'Угу',
+		'shit': 'Хуйня'
+	},
+	ENG: {
+		'confirm': 'Confirm',
+		'hoot': 'Yea',
+		'shir': 'Bullshit'
+	}
+}
+
 thumb_url = f'https://api.telegram.org/file/bot{TOKEN}/photos/file_2.jpg'
 bot = telebot.TeleBot(TOKEN)
 # print(bot.get_me())
 
 
-def get_confirm_message():
+def get_confirm_message(lang: str):
+	if lang not in CONFIRMS:
+		lang = RUS
 	r = random.random()
-	return 'Подтверждаю' if r > 0.5 else 'Угу'
+	key = 'confirm' if r > 0.5 else 'hoot' if r > 0.1 else 'shit'
+	return CONFIRMS[lang][key]
+
+
+def reply(text: str, message_id: int) -> Optional[dict]:
+	if 'филин' in text and 'подтверди' in text:
+		return {
+			'text': get_confirm_message(RUS),
+			'reply_to_message_id': message_id
+		}
+	if 'owl' in text and 'confirm' in text:
+		return {
+			'text': get_confirm_message(ENG),
+			'reply_to_message_id': message_id
+		}
+	if 'подтверди' in text:
+		return {
+			'text': get_confirm_message(RUS),
+		}
+	if 'confirm' in text:
+		return {
+			'text': get_confirm_message(ENG),
+		}
+	if 'сколк' in text:
+		return {
+			'text': 'Пидарасы',
+			'reply_to_message_id': message_id
+		}
+	r = random.randint(1, 100)
+	if r < 10:
+		return {
+			'text': CONFIRMS[RUS]['hoot']
+		}
+	return None
 
 
 @bot.edited_message_handler(content_types=['text'])
@@ -22,16 +74,9 @@ def text_handler(message: Message):
 	# print(f"{message.from_user} - {message.text}")
 	text = message.text.lower()
 	chat_id = message.chat.id
-	if 'филин' in text and 'подтверди' in text:
-		bot.send_message(chat_id, get_confirm_message(), reply_to_message_id=message.message_id)
-	elif 'подтверди' in text:
-		bot.send_message(chat_id, get_confirm_message())
-	elif 'сколк' in text:
-		bot.send_message(chat_id, 'Пидарасы', reply_to_message_id=message.message_id)
-	else:
-		r = random.randint(1, 100)
-		if r < 10:
-			bot.send_message(chat_id, 'Угу')
+	payload = reply(text, message.message_id)
+	if payload:
+		bot.send_message(chat_id, **payload)
 
 
 @bot.inline_handler(lambda query: query.query)
