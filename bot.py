@@ -11,6 +11,11 @@ bot = telebot.TeleBot(TOKEN)
 # print(bot.get_me())
 
 
+def get_confirm_message():
+	r = random.random()
+	return 'Подтверждаю' if r > 0.5 else 'Угу'
+
+
 @bot.edited_message_handler(content_types=['text'])
 @bot.message_handler(content_types=['text'])
 def text_handler(message: Message):
@@ -18,9 +23,9 @@ def text_handler(message: Message):
 	text = message.text.lower()
 	chat_id = message.chat.id
 	if 'филин' in text and 'подтверди' in text:
-		bot.send_message(chat_id, 'Подтверждаю', reply_to_message_id=message.message_id)
+		bot.send_message(chat_id, get_confirm_message(), reply_to_message_id=message.message_id)
 	elif 'подтверди' in text:
-		bot.send_message(chat_id, 'Подтверждаю')
+		bot.send_message(chat_id, get_confirm_message())
 	elif 'сколк' in text:
 		bot.send_message(chat_id, 'Пидарасы', reply_to_message_id=message.message_id)
 	else:
