@@ -21,6 +21,8 @@ def text_handler(message: Message):
 		bot.send_message(chat_id, 'Подтверждаю', reply_to_message_id=message.message_id)
 	elif 'подтверди' in text:
 		bot.send_message(chat_id, 'Подтверждаю')
+	elif 'сколк' in text:
+		bot.send_message(chat_id, 'Пидарасы', reply_to_message_id=message.message_id)
 	else:
 		r = random.randint(1, 100)
 		if r < 10:
