@@ -36,7 +36,7 @@ CONFIRMS = {
 	}
 }
 
-thumb_url = f'https://api.telegram.org/file/bot{TOKEN}/photos/file_2.jpg'
+THUMB_URL = f'https://api.telegram.org/file/bot{TOKEN}/photos/file_2.jpg'
 bot = telebot.TeleBot(TOKEN)
 
 
@@ -110,7 +110,7 @@ def text_handler(message: Message):
 
 @bot.inline_handler(lambda query: query.query)
 def query_text(inline_query):
-	r = InlineQueryResultArticle('1', 'Подтвердить', InputTextMessageContent('Подтверждаю'), thumb_url=thumb_url)
+	r = InlineQueryResultArticle('1', 'Подтвердить', InputTextMessageContent('Подтверждаю'), thumb_url=THUMB_URL)
 	bot.answer_inline_query(inline_query.id, results=[r])
 
 
