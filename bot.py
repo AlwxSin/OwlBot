@@ -106,6 +106,11 @@ def get_reply_payload(text: str, message_id: int) -> dict:
     return {}
 
 
+@bot.message_handler(commands=['start', 'help'])
+def handle_start_help(message):
+    bot.send_message(message.chat.id, text=ORIGINAL_JOKE)
+
+
 @bot.edited_message_handler(content_types=['text'])
 @bot.message_handler(content_types=['text'])
 def text_handler(message: Message):
@@ -123,11 +128,6 @@ def text_handler(message: Message):
 def query_text(inline_query):
     r = InlineQueryResultArticle('1', 'Подтвердить', InputTextMessageContent('Подтверждаю'), thumb_url=THUMB_URL)
     bot.answer_inline_query(inline_query.id, results=[r])
-
-
-@bot.message_handler(commands=['start', 'help'])
-def handle_start_help(message):
-    bot.send_message(message.chat.id, text=ORIGINAL_JOKE)
 
 
 bot.polling()
