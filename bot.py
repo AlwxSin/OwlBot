@@ -10,6 +10,7 @@ TOKEN = os.environ['OWL_BOT_TOKEN']
 RUS = 'rus'
 ENG = 'eng'
 GER = 'ger'
+GEO = 'geo'  # Georgia
 
 
 CONFIRMS = {
@@ -27,6 +28,11 @@ CONFIRMS = {
 		'confirm': 'Bekräftige',
 		'hoot': random.choice(['Ja', 'Ja-Ja', 'Jo', 'Stimmt']),
 		'shit': 'Dingsda'
+	},
+	GEO: {
+		'confirm': 'ვადასტურებ',
+		'hoot': 'ჰო',
+		'shit': 'ვადასტურებ'  # for now same as confirm
 	}
 }
 
@@ -58,6 +64,11 @@ def reply(text: str, message_id: int) -> Optional[dict]:
 			'text': get_confirm_message(GER),
 			'reply_to_message_id': message_id
 		}
+	if 'ზარნაშო' in text and 'დადასტურება' in text:
+		return {
+			'text': get_confirm_message(GEO),
+			'reply_to_message_id': message_id
+		}
 	if 'подтверди' in text:
 		return {
 			'text': get_confirm_message(RUS),
@@ -67,6 +78,10 @@ def reply(text: str, message_id: int) -> Optional[dict]:
 			'text': get_confirm_message(ENG),
 		}
 	if 'bekräftig' in text:
+		return {
+			'text': get_confirm_message(GER),
+		}
+	if 'დადასტურება' in text:
 		return {
 			'text': get_confirm_message(GER),
 		}
