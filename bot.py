@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 import os
 import random
-from typing import Optional
 
 import telebot
 from telebot.types import Message, InlineQueryResultArticle, InputTextMessageContent
@@ -37,6 +36,7 @@ CONFIRMS = {
 }
 
 THUMB_URL = f'https://api.telegram.org/file/bot{TOKEN}/photos/file_2.jpg'
+STIKER_ID = 'CAADAgADTQQAAqYWEAABbWQv8i-T5yIC'
 bot = telebot.TeleBot(TOKEN)
 
 
@@ -48,8 +48,12 @@ def get_confirm_message(lang: str):
 	return CONFIRMS[lang][key]
 
 
-def reply(text: str, message_id: int) -> Optional[dict]:
+def get_reply_payload(text: str, message_id: int) -> dict:
+	r = random.randint(1, 100)
+
 	if 'филин' in text and 'подтверди' in text:
+		if r < 5:
+			return {'sticker': True}
 		return {
 			'text': get_confirm_message(RUS),
 			'reply_to_message_id': message_id
@@ -70,6 +74,8 @@ def reply(text: str, message_id: int) -> Optional[dict]:
 			'reply_to_message_id': message_id
 		}
 	if 'подтверди' in text:
+		if r < 5:
+			return {'sticker': True}
 		return {
 			'text': get_confirm_message(RUS),
 		}
@@ -90,12 +96,12 @@ def reply(text: str, message_id: int) -> Optional[dict]:
 			'text': 'Пидарасы',
 			'reply_to_message_id': message_id
 		}
-	r = random.randint(1, 100)
+
 	if r < 10:
 		return {
 			'text': CONFIRMS[RUS]['hoot']
 		}
-	return None
+	return {}
 
 
 @bot.edited_message_handler(content_types=['text'])
@@ -103,8 +109,11 @@ def reply(text: str, message_id: int) -> Optional[dict]:
 def text_handler(message: Message):
 	text = message.text.lower()
 	chat_id = message.chat.id
-	payload = reply(text, message.message_id)
-	if payload:
+	payload = get_reply_payload(text, message.message_id)
+
+	if 'sticker' in payload:
+		bot.send_sticker(chat_id, STIKER_ID)
+	elif payload:
 		bot.send_message(chat_id, **payload)
 
 
