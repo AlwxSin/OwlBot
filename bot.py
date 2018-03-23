@@ -130,4 +130,4 @@ def query_text(inline_query):
     bot.answer_inline_query(inline_query.id, results=[r])
 
 
-bot.polling()
+bot.polling(timeout=60)
