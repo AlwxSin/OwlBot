@@ -5,6 +5,8 @@ import random
 import telebot
 from telebot.types import Message, InlineQueryResultArticle, InputTextMessageContent
 
+from texts import ORIGINAL_JOKE
+
 TOKEN = os.environ['OWL_BOT_TOKEN']
 RUS = 'rus'
 ENG = 'eng'
@@ -121,6 +123,11 @@ def text_handler(message: Message):
 def query_text(inline_query):
     r = InlineQueryResultArticle('1', 'Подтвердить', InputTextMessageContent('Подтверждаю'), thumb_url=THUMB_URL)
     bot.answer_inline_query(inline_query.id, results=[r])
+
+
+@bot.message_handler(commands=['start', 'help'])
+def handle_start_help(message):
+    bot.send_message(message.chat.id, text=ORIGINAL_JOKE)
 
 
 bot.polling()
