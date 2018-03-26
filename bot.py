@@ -93,11 +93,6 @@ def get_reply_payload(text: str, message_id: int) -> dict:
         return {
             'text': get_confirm_message(GER),
         }
-    if 'сколк' in text:
-        return {
-            'text': 'Пидарасы',
-            'reply_to_message_id': message_id
-        }
 
     if r < 10:
         return {
