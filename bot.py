@@ -53,7 +53,7 @@ def get_confirm_message(lang: str):
 def get_reply_payload(text: str, message_id: int) -> dict:
     r = random.randint(1, 100)
 
-    if 'филин' in text and 'подтверди' in text:
+    if 'филин' in text and any(confirm_str in text for confirm_str in ('подтверди', 'подтверждаешь')):
         if r < 5:
             return {'sticker': True}
         return {
