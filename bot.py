@@ -37,6 +37,19 @@ CONFIRMS = {
     }
 }
 
+OWL_NAMES = {
+    'филин': RUS,
+    'owl': ENG,
+    'der uhu': GER,
+    'ზარნაშო': GEO
+}
+AGREE_NAMES = {
+    'подтверди': RUS,
+    'подтверждаешь': RUS,
+    'confirm': ENG,
+    'bekräftig': GER,
+    'დადასტურება': GEO
+}
 THUMB_URL = f'https://api.telegram.org/file/bot{TOKEN}/photos/file_2.jpg'
 STIKER_ID = 'CAADAgADTQQAAqYWEAABbWQv8i-T5yIC'
 bot = telebot.TeleBot(TOKEN)
@@ -51,54 +64,30 @@ def get_confirm_message(lang: str):
 
 
 def get_reply_payload(text: str, message_id: int) -> dict:
+    reply_data = {}
+    language = None
+    is_reply_needed = False
     r = random.randint(1, 100)
 
-    if 'филин' in text and any(confirm_str in text for confirm_str in ('подтверди', 'подтверждаешь')):
-        if r < 5:
-            return {'sticker': True}
-        return {
-            'text': get_confirm_message(RUS),
-            'reply_to_message_id': message_id
-        }
-    if 'owl' in text and 'confirm' in text:
-        return {
-            'text': get_confirm_message(ENG),
-            'reply_to_message_id': message_id
-        }
-    if 'der uhu' in text and 'bekräftig' in text:
-        return {
-            'text': get_confirm_message(GER),
-            'reply_to_message_id': message_id
-        }
-    if 'ზარნაშო' in text and 'დადასტურება' in text:
-        return {
-            'text': get_confirm_message(GEO),
-            'reply_to_message_id': message_id
-        }
-    if 'подтверди' in text:
-        if r < 5:
-            return {'sticker': True}
-        return {
-            'text': get_confirm_message(RUS),
-        }
-    if 'confirm' in text:
-        return {
-            'text': get_confirm_message(ENG),
-        }
-    if 'bekräftig' in text:
-        return {
-            'text': get_confirm_message(GER),
-        }
-    if 'დადასტურება' in text:
-        return {
-            'text': get_confirm_message(GER),
-        }
+    for name in AGREE_NAMES.keys():
+        if name in text:
+            language = AGREE_NAMES[name]
+            for owl_name in OWL_NAMES.keys():
+                if owl_name in text:
+                    is_reply_needed = True
+    if language:
+        if language == RUS:
+            if r < 5:
+                reply_data['sticker'] = True
 
-    if r < 10:
-        return {
-            'text': CONFIRMS[RUS]['hoot']
-        }
-    return {}
+        reply_data['text'] = get_confirm_message(language)
+        if is_reply_needed:
+            reply_data['reply_to_message_id'] = message_id
+    else:
+        if r < 10:
+            reply_data['text'] = CONFIRMS[RUS]['hoot']
+
+    return reply_data
 
 
 @bot.message_handler(commands=['start', 'help'])
