@@ -69,6 +69,7 @@ def detect_language(text: str) -> Optional[str]:
     for name in AGREE_NAMES.keys():
         if name in text:
             language = AGREE_NAMES[name]
+            break
     return language
 
 
@@ -77,6 +78,7 @@ def check_is_reply_needed(text: str) -> bool:
     for owl_name in OWL_NAMES.keys():
         if owl_name in text:
             is_reply_needed = True
+            break
     return is_reply_needed
 
 
