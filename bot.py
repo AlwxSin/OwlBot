@@ -33,7 +33,7 @@ CONFIRMS = {
     GEO: {
         'confirm': 'ვადასტურებ',
         'hoot': 'ჰო',
-        'shit': 'ვადასტურებ'  # for now same as confirm
+        'shit': 'ამაზრზენი'
     }
 }
 
