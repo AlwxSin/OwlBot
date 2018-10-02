@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import os
 import random
+from typing import Optional
 
 import telebot
 from telebot.types import Message, InlineQueryResultArticle, InputTextMessageContent
@@ -63,18 +64,28 @@ def get_confirm_message(lang: str):
     return CONFIRMS[lang][key]
 
 
-def get_reply_payload(text: str, message_id: int) -> dict:
-    reply_data = {}
+def detect_language(text: str) -> Optional[str]:
     language = None
-    is_reply_needed = False
-    r = random.randint(1, 100)
-
     for name in AGREE_NAMES.keys():
         if name in text:
             language = AGREE_NAMES[name]
-            for owl_name in OWL_NAMES.keys():
-                if owl_name in text:
-                    is_reply_needed = True
+    return language
+
+
+def check_is_reply_needed(text: str) -> bool:
+    is_reply_needed = False
+    for owl_name in OWL_NAMES.keys():
+        if owl_name in text:
+            is_reply_needed = True
+    return is_reply_needed
+
+
+def get_reply_payload(text: str, message_id: int) -> dict:
+    reply_data = {}
+    language = detect_language(text)
+    is_reply_needed = check_is_reply_needed(text)
+    r = random.randint(1, 100)
+
     if language:
         if language == RUS:
             if r < 5:
